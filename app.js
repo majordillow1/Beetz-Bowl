@@ -1,13 +1,11 @@
 const express = require('express')
 const app = express();
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+});
 
-var http = require('http');
-var fs = require('fs');
-http.createServer(function (req, res) {
-  fs.readFile('demofile1.html', function(err, data) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write(data);
-    res.end();
-  });
-}).listen(process.env.PORT || 8888);
+app.listen(process.env.PORT || 8888, () => {
+  console.log('Example app listening on port 8000!')
+});
+
