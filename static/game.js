@@ -20,8 +20,16 @@ socket.on('connect', function(data) {
   function CreateRoom(){
 //in this function we want to change the elements on the page adding a "room code" text and add the "Queue list" both of these should just be empty then we will do
 //a socket.on in which the server will relay info back to the client to fill this stuff in.
-
+document.getElementById('Start_Room_Button').style.display = "none";
+document.getElementById('Join_Room_Button').style.display = "none";
+document.getElementById('Roomname').style.display = "inherit";
+document.getElementById('Roomcode').style.display = "inherit";
   }
   function JoinRoom(){
 //in this function we wont send any info to the server instead we will now change the page to ask for a username and a room code.
+document.getElementById('Start_Room_Button').style.display = "none";
+document.getElementById('Join_Room_Button').style.display = "none";
+document.getElementById('UsernameText').style.display = "inherit";
+document.getElementById('RoomNameText').style.display = "inherit";
+document.getElementById('RoomCodeText').style.display = "inherit";
   }
