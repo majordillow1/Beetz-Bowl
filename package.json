@@ -1,0 +1,22 @@
+{
+  "name": "beetz-bowl",
+  "version": "1.0.0",
+  "description": "Beetz bowl to play music with friends",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/majordillow1/Beetz-Bowl.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/majordillow1/Beetz-Bowl/issues"
+  },
+  "homepage": "https://github.com/majordillow1/Beetz-Bowl#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
