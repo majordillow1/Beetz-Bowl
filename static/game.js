@@ -12,3 +12,16 @@ socket.on('connect', function(data) {
   //so say we want a "join game" from the player and the information he needs to send to join a room
   //serverid = document.getElementById("server-info").text;
   //socket.emit('join game', serverid);
+
+  //receiving info from my commmands will look like this
+  //socket.on('clientsidecommand', function(args){write code in here});
+
+
+  function CreateRoom(){
+//in this function we want to change the elements on the page adding a "room code" text and add the "Queue list" both of these should just be empty then we will do
+//a socket.on in which the server will relay info back to the client to fill this stuff in.
+
+  }
+  function JoinRoom(){
+//in this function we wont send any info to the server instead we will now change the page to ask for a username and a room code.
+  }
