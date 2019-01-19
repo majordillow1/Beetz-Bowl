@@ -2,9 +2,9 @@
   "name": "beetz-bowl",
   "version": "1.0.0",
   "description": "Beetz bowl to play music with friends",
-  "main": "node app.js",
+  "main": "app.js",
   "scripts": {
-    "start": "app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
