@@ -6,3 +6,9 @@ socket.on('connect', function(data) {
     //displayed using Javascript. 
   console.log("did connect");
   });
+
+  //in functions to send commands to the server I will give out a list of commands you can use but you will use 
+  //socket.emit('command', <argument>);
+  //so say we want a "join game" from the player and the information he needs to send to join a room
+  //serverid = document.getElementById("server-info").text;
+  //socket.emit('join game', serverid);
