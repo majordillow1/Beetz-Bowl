@@ -18,17 +18,17 @@ setInterval(
       //use this to send messages to players in rooms
       //io.sockets.in('room' + games[i].id).emit('hi', games[i].id);
 
-      var clients = io.sockets.adapter.rooms['room'+servers[i].id];
-
+      var clients = io.sockets.adapter.rooms[servers[i].id];
+      console.log(servers[i].id);
       if(clients == null){
-
+        console.log("removing game " + servers[i].id);
         servers.splice(i,1);
-        console.log("removing game");
+        
       }
 
     }
  },
- 3000);
+ 10000);
 var servers = [];
 io.on('connection', function(client){
   console.log('Client Connected....');
@@ -37,9 +37,9 @@ io.on('connection', function(client){
     //handle a disconnect
     //to send to specific rooms io.sockets.in(rooms).emit('RemovefromPlayaList',removeArray);
     client.on('CreateRoom', function(g){
-      console.log('creating room');
+      
         g.id = (Math.random()+1).toString(36).slice(2, 18);
-        
+        console.log('creating room' + g.id + g.creator);
         servers.push(g);
     });
     client.on('retrieveRoom', function(creatorId){
@@ -47,7 +47,8 @@ io.on('connection', function(client){
       for(var i = 0;i<servers.length;i++){
         //use this to send messages to players in rooms
         //io.sockets.in('room' + games[i].id).emit('hi', games[i].id);
-        var clientsID = io.sockets.adapter.rooms['room'+servers[i].creator];
+        var clientsID = servers[i].creator;
+        console.log('checked list' + clientsID + " " + creatorId);
         if(clientsID == creatorId){
           client.emit('JoinOnId', servers[i].id);
           console.log('sending join id');

@@ -18,7 +18,7 @@ socket.on('connect', function(data) {
 //join room that was returned
 socket.on('JoinOnId', function(id){
 socket.emit('JoinRoom', id);
-document.getElementById('RoomNameText').innerHTML = "Room name " + id;
+document.getElementById('Roomname').innerHTML = "Room name " + id;
 console.log('shouldve got id');
 });
   function CreateRoom(){
@@ -42,7 +42,7 @@ document.getElementById('RoomCodeText').style.display = "inherit";
   function ServerCreateRoom(){
 //in this function we will actually create the server on the server side
 var gameObject = {};
-gameObject.id = null;
+gameObject.id = "test";
 gameObject.creator = socket.id;
 gameObject.code = "1234";
 console.log('starting talk to server');
