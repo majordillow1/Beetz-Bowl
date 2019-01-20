@@ -18,6 +18,7 @@ socket.on('connect', function(data) {
 //join room that was returned
 socket.on('JoinOnId', function(id){
 socket.emit('JoinRoom', id);
+document.getElementById('RoomNameText').innerHTML = "Room name " + id;
 });
   function CreateRoom(){
 //in this function we want to change the elements on the page adding a "room code" text and add the "Queue list" both of these should just be empty then we will do
