@@ -15,8 +15,10 @@ socket.on('connect', function(data) {
 
   //receiving info from my commmands will look like this
   //socket.on('clientsidecommand', function(args){write code in here});
-
-
+//join room that was returned
+socket.on('JoinOnId', function(id){
+socket.emit('JoinRoom', id);
+});
   function CreateRoom(){
 //in this function we want to change the elements on the page adding a "room code" text and add the "Queue list" both of these should just be empty then we will do
 //a socket.on in which the server will relay info back to the client to fill this stuff in.
@@ -24,6 +26,7 @@ document.getElementById('Start_Room_Button').style.display = "none";
 document.getElementById('Join_Room_Button').style.display = "none";
 document.getElementById('Roomname').style.display = "inherit";
 document.getElementById('Roomcode').style.display = "inherit";
+document.getElementById('Create_Server_Button').style.display = "inherit";
   }
   function JoinRoom(){
 //in this function we wont send any info to the server instead we will now change the page to ask for a username and a room code.
@@ -32,4 +35,16 @@ document.getElementById('Join_Room_Button').style.display = "none";
 document.getElementById('UsernameText').style.display = "inherit";
 document.getElementById('RoomNameText').style.display = "inherit";
 document.getElementById('RoomCodeText').style.display = "inherit";
+  }
+
+  function ServerCreateRoom(){
+//in this function we will actually create the server on the server side
+var gameObject = {};
+gameObject.id = null;
+gameObject.creator = socket.id;
+gameObject.code = "1234";
+//Create a random code for the room name (server side will fill this in). (Math.random()+1).toString(36).slice(2, 18)
+socket.emit('CreateRoom',gameObject);
+//find room with the socket id, and return it's room id after its created. Then Join the room in the next function
+socket.emit('retrieveRoom', gameObject.creator);
   }
