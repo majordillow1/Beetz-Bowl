@@ -19,6 +19,7 @@ socket.on('connect', function(data) {
 socket.on('JoinOnId', function(id){
 socket.emit('JoinRoom', id);
 document.getElementById('RoomNameText').innerHTML = "Room name " + id;
+console.log('shouldve got id');
 });
   function CreateRoom(){
 //in this function we want to change the elements on the page adding a "room code" text and add the "Queue list" both of these should just be empty then we will do
@@ -44,6 +45,7 @@ var gameObject = {};
 gameObject.id = null;
 gameObject.creator = socket.id;
 gameObject.code = "1234";
+console.log('starting talk to server');
 //Create a random code for the room name (server side will fill this in). (Math.random()+1).toString(36).slice(2, 18)
 socket.emit('CreateRoom',gameObject);
 //find room with the socket id, and return it's room id after its created. Then Join the room in the next function
