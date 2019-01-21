@@ -11,6 +11,11 @@ server.listen(process.env.PORT || 8888, () => {
 });
 //all of our servers, we need to keep track of them so we can delete a room when nobody is using it.
 var servers = [];
+var Test = {};
+Test.id = "test";
+Test.creator = "test";
+Test.code = "test";
+servers.push(Test);
 setInterval(
   function(){
 
@@ -29,7 +34,7 @@ setInterval(
     }
  },
  10000);
-var servers = [];
+//var servers = [];
 io.on('connection', function(client){
   console.log('Client Connected....');
   client.on('disconnecting', function(){
@@ -39,8 +44,30 @@ io.on('connection', function(client){
     client.on('CreateRoom', function(g){
       
         g.id = (Math.random()+1).toString(36).slice(2, 18);
-        console.log('creating room' + g.id + g.creator);
+        console.log('creating room' + "id: " + g.id + "creator: " + g.creator);
         servers.push(g);
+
+    });
+     //client join room
+     client.on('JoinRoom', function(serverinfo){
+       
+       client.username = serverinfo.username;
+      console.log('joining person to room');
+      for(var t = 0;t<servers.length;t++){
+        
+        console.log('checked list');
+        if(serverinfo.name == servers[t].id){
+          console.log('find if code matches');
+          if(serverinfo.code == servers[t].code){
+            console.log('sending join info');
+            client.join(serverinfo.name);
+          }else{
+            console.log('Wrong code');
+            client.emit('wrongCode');
+          }
+          
+        }
+      }
     });
     client.on('retrieveRoom', function(creatorId){
       console.log('received ask for id');
@@ -50,14 +77,12 @@ io.on('connection', function(client){
         var clientsID = servers[i].creator;
         console.log('checked list' + clientsID + " " + creatorId);
         if(clientsID == creatorId){
-          client.emit('JoinOnId', servers[i].id);
+          client.emit('JoinOnId', servers[i]);
           console.log('sending join id');
+          client.join(servers[i].id);
         }
       }
     });
-    //client join room
-    client.on('JoinRoom', function(serverId){
-        console.log('joining person to room');
-        client.join(serverId);
-    });
+   
   });
+ 

@@ -16,10 +16,48 @@ socket.on('connect', function(data) {
   //receiving info from my commmands will look like this
   //socket.on('clientsidecommand', function(args){write code in here});
 //join room that was returned
-socket.on('JoinOnId', function(id){
-socket.emit('JoinRoom', id);
-document.getElementById('Roomname').innerHTML = "Room name " + id;
+socket.on('JoinOnId', function(server){
+  JoinInformation = {};
+  JoinInformation.username = "Master";
+  JoinInformation.name = server.id;
+  JoinInformation.code = server.code;
+  
+//socket.emit('JoinRoom', JoinInformation);
+document.getElementById('Roomname').innerHTML = "Room name " + server.id;
+document.getElementById('Roomcode').innerHTML = "Room code " + server.code;
 console.log('shouldve got id');
+});
+
+socket.on('addToPlayalist',function(usaname){
+  var myNode = document.getElementById("playerList");
+  while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
+  }
+  var userArray = usaname.split("--/");
+  console.log("add " + userArray);
+  for(var i in userArray){
+  var playa =  document.createElement('p');
+  var textnode = document.createTextNode(userArray[i]);         // Create a text node
+playa.appendChild(textnode);
+
+    document.getElementById('playerList').appendChild(playa);
+  }
+});
+socket.on('RemovefromPlayaList',function(user){
+console.log("remove "+user);
+var myNode = document.getElementById("playerList");
+while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+}
+
+for(var i in user){
+var playa =  document.createElement('p');
+var textnode = document.createTextNode(user[i]);         // Create a text node
+playa.appendChild(textnode);
+
+  document.getElementById('playerList').appendChild(playa);
+}
+
 });
   function CreateRoom(){
 //in this function we want to change the elements on the page adding a "room code" text and add the "Queue list" both of these should just be empty then we will do
@@ -37,8 +75,21 @@ document.getElementById('Join_Room_Button').style.display = "none";
 document.getElementById('UsernameText').style.display = "inherit";
 document.getElementById('RoomNameText').style.display = "inherit";
 document.getElementById('RoomCodeText').style.display = "inherit";
-  }
+document.getElementById('enterRoomButton').style.display = "inherit";
 
+  }
+function EnterRoom(){
+  //lets send some info to the server
+username = document.getElementById('UsernameText').value;
+roomId = document.getElementById('RoomNameText').value;
+roomCode = document.getElementById('RoomCodeText').value;
+
+var joinInfo = {};
+joinInfo.username = username;
+joinInfo.name = roomId;
+joinInfo.code = roomCode;
+socket.emit('JoinRoom', joinInfo);
+}
   function ServerCreateRoom(){
 //in this function we will actually create the server on the server side
 var gameObject = {};
@@ -50,4 +101,5 @@ console.log('starting talk to server');
 socket.emit('CreateRoom',gameObject);
 //find room with the socket id, and return it's room id after its created. Then Join the room in the next function
 socket.emit('retrieveRoom', gameObject.creator);
+document.getElementById('Create_Server_Button').style.display = "none";
   }
