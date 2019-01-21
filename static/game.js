@@ -27,7 +27,9 @@ document.getElementById('Roomname').innerHTML = "Room name " + server.id;
 document.getElementById('Roomcode').innerHTML = "Room code " + server.code;
 console.log('shouldve got id');
 });
-
+socket.on('wrongCode', function(){
+alert("This is the wrong code. Please try again!");
+});
 socket.on('addToPlayalist',function(usaname){
   var myNode = document.getElementById("playerList");
   while (myNode.firstChild) {
