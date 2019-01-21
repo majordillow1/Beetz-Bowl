@@ -28,7 +28,37 @@ document.getElementById('Roomcode').innerHTML = "Room code " + server.code;
 console.log('shouldve got id');
 });
 
+socket.on('addToPlayalist',function(usaname){
+  var myNode = document.getElementById("playerList");
+  while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
+  }
+  var userArray = usaname.split("--/");
+  console.log("add " + userArray);
+  for(var i in userArray){
+  var playa =  document.createElement('p');
+  var textnode = document.createTextNode(userArray[i]);         // Create a text node
+playa.appendChild(textnode);
 
+    document.getElementById('playerList').appendChild(playa);
+  }
+});
+socket.on('RemovefromPlayaList',function(user){
+console.log("remove "+user);
+var myNode = document.getElementById("playerList");
+while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+}
+
+for(var i in user){
+var playa =  document.createElement('p');
+var textnode = document.createTextNode(user[i]);         // Create a text node
+playa.appendChild(textnode);
+
+  document.getElementById('playerList').appendChild(playa);
+}
+
+});
   function CreateRoom(){
 //in this function we want to change the elements on the page adding a "room code" text and add the "Queue list" both of these should just be empty then we will do
 //a socket.on in which the server will relay info back to the client to fill this stuff in.
