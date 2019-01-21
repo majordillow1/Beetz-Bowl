@@ -35,9 +35,40 @@ setInterval(
  },
  10000);
 //var servers = [];
+var usernamesperRoom = {};
 io.on('connection', function(client){
   console.log('Client Connected....');
   client.on('disconnecting', function(){
+    if(client.username != null){
+      //find room
+      let rooms = Object.keys(client.rooms)[1];
+      //console.log(rooms + " disconnected from " + client.username);
+      //this is the array of the string rigtht
+      var removeArray = usernamesperRoom[rooms].split("--/");
+      for(var i in removeArray){
+        //console.log("array now" + i);
+      }
+      //go through and find it and delete it
+      var index = removeArray.indexOf(client.username);
+      removeArray.splice(index,1);
+      //console.log("array becomes " + i);
+      //send it with new...oh
+      io.sockets.in(rooms).emit('RemovefromPlayaList',removeArray);
+      usernamesperRoom[rooms] = null;
+      for(var replacestring in removeArray){
+        if(usernamesperRoom[rooms] == null){
+          console.log("room was empty add" + removeArray[replacestring]);
+          usernamesperRoom[rooms] = removeArray[replacestring];
+        }else{
+
+          usernamesperRoom[rooms] = usernamesperRoom[rooms] + "--/" + removeArray[replacestring];
+          console.log("adding" + removeArray[replacestring] + "to string");
+        }
+
+      }
+
+    }
+  //  console.log("disconnect");
   });
     //handle a disconnect
     //to send to specific rooms io.sockets.in(rooms).emit('RemovefromPlayaList',removeArray);
@@ -61,6 +92,21 @@ io.on('connection', function(client){
           if(serverinfo.code == servers[t].code){
             console.log('sending join info');
             client.join(serverinfo.name);
+            //emit to update the player room list
+
+      let rooms = serverinfo.name;
+      client.username = serverinfo.username;
+      //console.log("added " + usernames);
+     // [ <socket.id>, 'room 237' ]
+     //set this rooms username list to get bigger
+     if(usernamesperRoom[rooms]==null){
+       usernamesperRoom[rooms] = serverinfo.username;
+     }else{
+       usernamesperRoom[rooms] = usernamesperRoom[rooms] + "--/" +serverinfo.username;
+     }
+
+    //  console.log("your room sir " + rooms + " "+ usernamesperRoom[rooms]);
+      io.sockets.in(rooms).emit('addToPlayalist',usernamesperRoom[rooms]);
           }else{
             console.log('Wrong code');
             client.emit('wrongCode');
