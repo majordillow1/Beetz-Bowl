@@ -7,7 +7,7 @@ app.get('/',function(req,res,next){
 });
 app.use('/static', express.static(__dirname + '/static'));
 server.listen(process.env.PORT || 8888, () => {
-  console.log('Example app listening on port 8000!')
+  console.log('Example app listening on port 8888!')
 });
 //all of our servers, we need to keep track of them so we can delete a room when nobody is using it.
 var servers = [];
