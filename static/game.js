@@ -29,6 +29,17 @@ console.log('shouldve got id');
 });
 socket.on('wrongCode', function(){
 alert("This is the wrong code. Please try again!");
+document.getElementById('enterRoomButton').style.display = "inherit";
+document.getElementById('UsernameText').style.display = "inherit";
+document.getElementById('RoomNameText').style.display = "inherit";
+document.getElementById('RoomCodeText').style.display = "inherit";
+});
+socket.on('RoomNotFound', function(){
+alert("Room not found");
+document.getElementById('enterRoomButton').style.display = "inherit";
+document.getElementById('UsernameText').style.display = "inherit";
+document.getElementById('RoomNameText').style.display = "inherit";
+document.getElementById('RoomCodeText').style.display = "inherit";
 });
 socket.on('addToPlayalist',function(usaname){
   var myNode = document.getElementById("playerList");

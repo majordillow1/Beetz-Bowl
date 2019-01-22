@@ -39,6 +39,7 @@ var usernamesperRoom = {};
 io.on('connection', function(client){
   console.log('Client Connected....');
   client.on('disconnecting', function(){
+    if(usernamesperRoom != null){
     if(client.username != null){
       //find room
       let rooms = Object.keys(client.rooms)[1];
@@ -68,6 +69,7 @@ io.on('connection', function(client){
       }
 
     }
+  }
   //  console.log("disconnect");
   });
     //handle a disconnect
@@ -82,7 +84,7 @@ io.on('connection', function(client){
      //client join room
      client.on('JoinRoom', function(serverinfo){
        
-       client.username = serverinfo.username;
+       //client.username = serverinfo.username;
       console.log('joining person to room');
       for(var t = 0;t<servers.length;t++){
         
@@ -93,7 +95,6 @@ io.on('connection', function(client){
             console.log('sending join info');
             client.join(serverinfo.name);
             //emit to update the player room list
-
       let rooms = serverinfo.name;
       client.username = serverinfo.username;
       //console.log("added " + usernames);
@@ -104,16 +105,17 @@ io.on('connection', function(client){
      }else{
        usernamesperRoom[rooms] = usernamesperRoom[rooms] + "--/" +serverinfo.username;
      }
-
     //  console.log("your room sir " + rooms + " "+ usernamesperRoom[rooms]);
       io.sockets.in(rooms).emit('addToPlayalist',usernamesperRoom[rooms]);
-          }else{
+        return;  
+      }else{
             console.log('Wrong code');
             client.emit('wrongCode');
+            return;
           }
-          
         }
       }
+      client.emit('RoomNotFound');
     });
     client.on('retrieveRoom', function(creatorId){
       console.log('received ask for id');
