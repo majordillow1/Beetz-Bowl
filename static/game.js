@@ -41,6 +41,13 @@ document.getElementById('UsernameText').style.display = "inherit";
 document.getElementById('RoomNameText').style.display = "inherit";
 document.getElementById('RoomCodeText').style.display = "inherit";
 });
+socket.on('usedUsername' ,function(){
+  alert("username in use");
+  document.getElementById('enterRoomButton').style.display = "inherit";
+  document.getElementById('UsernameText').style.display = "inherit";
+  document.getElementById('RoomNameText').style.display = "inherit";
+  document.getElementById('RoomCodeText').style.display = "inherit";
+});
 socket.on('addToPlayalist',function(usaname){
   var myNode = document.getElementById("playerList");
   while (myNode.firstChild) {

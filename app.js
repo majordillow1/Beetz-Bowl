@@ -16,6 +16,7 @@ Test.id = "test";
 Test.creator = "test";
 Test.code = "test";
 servers.push(Test);
+var clientsUsernames = [];
 setInterval(
   function(){
 
@@ -42,6 +43,7 @@ io.on('connection', function(client){
     if(usernamesperRoom != null){
     if(client.username != null){
       //find room
+      clientsUsernames.splice(clientsUsernames.indexOf(client.username), 1);
       let rooms = Object.keys(client.rooms)[1];
       //console.log(rooms + " disconnected from " + client.username);
       //this is the array of the string rigtht
@@ -84,6 +86,14 @@ io.on('connection', function(client){
      //client join room
      client.on('JoinRoom', function(serverinfo){
        
+       for(var c = 0;c<clientsUsernames.length;c++){
+         console.log("Checking username " + clientsUsernames[c]);
+         if(serverinfo.username == clientsUsernames[c]){
+           console.log("found matching username");
+           client.emit("usedUsername");
+           return;
+         }
+       }
        //client.username = serverinfo.username;
       console.log('joining person to room');
       for(var t = 0;t<servers.length;t++){
@@ -97,6 +107,7 @@ io.on('connection', function(client){
             //emit to update the player room list
       let rooms = serverinfo.name;
       client.username = serverinfo.username;
+      clientsUsernames.push(client.username);
       //console.log("added " + usernames);
      // [ <socket.id>, 'room 237' ]
      //set this rooms username list to get bigger
