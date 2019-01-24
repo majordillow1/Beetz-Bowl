@@ -151,13 +151,23 @@ document.getElementById('Create_Server_Button').style.display = "none";
       document.getElementById('videolist').innerHTML = VideoList;
   }
       });
-  function PlayVideo(VideoQueue){
+      function PlayVideo(VideoQueue){
+        if(VideoList.length <= 1){
+          document.getElementById('player').style.display = "inherit";
+        player.loadVideoById(VideoList[0]);
+        player.playVideo();
+        }
+      }
+  function onYouTubeIframeAPIReady(){
    
     
         player = new YT.Player('player', {
           width: '640',
           height: '390',
-          videoId: VideoQueue,
+          videoId: '',
+          playerVars: {
+            'autoplay': 0
+          },
           events: {
             onReady: onPlayerReady,
             onStateChange: onPlayerStateChange
@@ -181,9 +191,12 @@ function onPlayerStateChange(event) {
           
           
           
-          VideoList.pop();
-          PlayVideo(VideoList[0]);
+          VideoList.shift();
+          var x = new String(VideoList[0])
+          //PlayVideo(VideoList[0]);
+          event.target.loadVideoById(x);
           console.log('video is now' + VideoList[0]);
+          document.getElementById('videolist').innerHTML = VideoList;
         }
     }
 }
