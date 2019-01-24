@@ -6,22 +6,26 @@
   </head>
   <body>
         <script src="/socket.io/socket.io.js"></script>
+		<h1>Beetz-Bowl</h2>
         <input id="Start_Room_Button" type="button" onclick="CreateRoom()" value="Create Room"/>
         <input id="Join_Room_Button" type="button" onclick="JoinRoom()" value="Join Room"/>
         <p id="Roomname">The room name</p>
         <p id="Roomcode">The room code</p>
-        <input id="roomPassword" type="text" value="password"/>
-        <input id="Create_Server_Button" type="button" onclick="ServerCreateRoom()" value="Start Bowl"/>
-        <input id="UsernameText" type="text" value="Username"/>
-        <input id="RoomNameText" type="text" value="Room Name"/>
-        <input id="RoomCodeText" type="text" value="Room Code"/>
-        <input id="enterRoomButton" type="button" value="enter room" onclick="EnterRoom()"/>
-        <input id="EnterVideo" type="Text" value="enter video id"/>
-        <input id="SubmitVideo" type="button" value="submit video" onclick="SubmitButton()"/>
-        <div id="player">
-         
-          <script src="https://www.youtube.com/player_api"></script>
-        </div>
+		<div align="center"> <!-- Center all buttons, inputs, and video -->
+			<input id="roomPassword" type="text" value="password"/>
+			<input id="Create_Server_Button" type="button" onclick="ServerCreateRoom()" value="Start Bowl"/>
+			<input id="UsernameText" type="text" value="Username"/>
+			<input id="RoomNameText" type="text" value="Room Name"/>
+			<input id="RoomCodeText" type="text" value="Room Code"/>
+			<input id="enterRoomButton" type="button" value="enter room" onclick="EnterRoom()"/>
+			<input id="EnterVideo" type="Text" value="enter video id"/>
+			<input id="SubmitVideo" type="button" value="submit video" onclick="SubmitButton()"/>
+			<div id="player">
+			 
+			  <script src="https://www.youtube.com/player_api"></script>
+			</div>
+		</div>
+		<h2>Queue List</h2>
         <div id="videolist">
 
         </div>

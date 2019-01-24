@@ -6,12 +6,15 @@
 }
 #UsernameText{
     display:none;
+	text-align: center;
 }
 #RoomNameText{
     display:none;
+	text-align: center;
 }
 #RoomCodeText{
     display:none;
+	text-align: center;
 }
 #Create_Server_Button{
     display:none;
@@ -21,13 +24,22 @@
 }
 #roomPassword{
     display:none;
+	text-align: center;
 }
 #EnterVideo{
     display:none;
+	text-align: center;
 }
 #SubmitVideo{
     display:none;
 }
 #player{
     display:none;
+}
+h2{
+	color: #000000;
+}
+body{
+	background-color: #C0C0C0;
+	text-align: center; /*Center all text within body*/
 }
