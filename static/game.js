@@ -87,6 +87,7 @@ document.getElementById('Join_Room_Button').style.display = "none";
 document.getElementById('Roomname').style.display = "inherit";
 document.getElementById('Roomcode').style.display = "inherit";
 document.getElementById('Create_Server_Button').style.display = "inherit";
+document.getElementById('roomPassword').style.display = "inherit";
   }
   function JoinRoom(){
 //in this function we wont send any info to the server instead we will now change the page to ask for a username and a room code.
@@ -96,7 +97,8 @@ document.getElementById('UsernameText').style.display = "inherit";
 document.getElementById('RoomNameText').style.display = "inherit";
 document.getElementById('RoomCodeText').style.display = "inherit";
 document.getElementById('enterRoomButton').style.display = "inherit";
-
+document.getElementById('EnterVideo').style.display = "inherit";
+document.getElementById('SubmitVideo').style.display = "inherit";
   }
 function EnterRoom(){
   //lets send some info to the server
@@ -115,10 +117,11 @@ socket.emit('JoinRoom', joinInfo);
 }
   function ServerCreateRoom(){
 //in this function we will actually create the server on the server side
+document.getElementById('roomPassword').style.display = "none";
 var gameObject = {};
 gameObject.id = "test";
 gameObject.creator = socket.id;
-gameObject.code = "1234";
+gameObject.code = document.getElementById('roomPassword').value;
 console.log('starting talk to server');
 //Create a random code for the room name (server side will fill this in). (Math.random()+1).toString(36).slice(2, 18)
 socket.emit('CreateRoom',gameObject);
@@ -126,3 +129,66 @@ socket.emit('CreateRoom',gameObject);
 socket.emit('retrieveRoom', gameObject.creator);
 document.getElementById('Create_Server_Button').style.display = "none";
   }
+  var isMaster = false;
+  socket.on('isMaster', function(){
+    isMaster = true;
+    });
+  var VideoList = [];
+  var player;
+  socket.on('addVideo', function(videoKey){
+    if(isMaster){
+    VideoList.push(videoKey);
+    
+      document.getElementById('videolist').innerHTML = VideoList;
+    
+    
+      
+      PlayVideo(VideoList[0]);
+    
+  }else{
+    VideoList.push(videoKey);
+    
+      document.getElementById('videolist').innerHTML = VideoList;
+  }
+      });
+  function PlayVideo(VideoQueue){
+   
+    
+        player = new YT.Player('player', {
+          width: '640',
+          height: '390',
+          videoId: VideoQueue,
+          events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange
+          }
+        });
+    
+
+    // autoplay video
+    
+  }
+  function onPlayerReady(event) {
+    event.target.playVideo();
+}
+
+// when video ends
+function onPlayerStateChange(event) {        
+    if(event.data === 0) {          
+        console.log("next video");
+        //VideoList.pop();
+        if(VideoList != null){
+          
+          
+          
+          VideoList.pop();
+          PlayVideo(VideoList[0]);
+          console.log('video is now' + VideoList[0]);
+        }
+    }
+}
+
+function SubmitButton(){
+  var videoInput = document.getElementById('EnterVideo').value;
+  socket.emit('submitVideo',videoInput);
+}

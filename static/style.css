@@ -19,3 +19,12 @@
 #enterRoomButton{
     display:none;
 }
+#roomPassword{
+    display:none;
+}
+#EnterVideo{
+    display:none;
+}
+#SubmitVideo{
+    display:none;
+}

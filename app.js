@@ -36,6 +36,7 @@ setInterval(
  },
  10000);
 //var servers = [];
+
 var usernamesperRoom = {};
 io.on('connection', function(client){
   console.log('Client Connected....');
@@ -47,7 +48,9 @@ io.on('connection', function(client){
       let rooms = Object.keys(client.rooms)[1];
       //console.log(rooms + " disconnected from " + client.username);
       //this is the array of the string rigtht
+      if(usernamesperRoom.length >= 2){
       var removeArray = usernamesperRoom[rooms].split("--/");
+      
       for(var i in removeArray){
         //console.log("array now" + i);
       }
@@ -72,6 +75,7 @@ io.on('connection', function(client){
 
     }
   }
+}
   //  console.log("disconnect");
   });
     //handle a disconnect
@@ -139,9 +143,14 @@ io.on('connection', function(client){
           client.emit('JoinOnId', servers[i]);
           console.log('sending join id');
           client.join(servers[i].id);
+          client.username = servers[i].id;
+          client.emit('isMaster');
         }
       }
     });
-   
+   client.on('submitVideo',function(VideoInput){
+    let rooms = Object.keys(client.rooms)[1];
+    io.in(rooms).emit('addVideo',VideoInput );
+   });
   });
  
