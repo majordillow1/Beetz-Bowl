@@ -166,7 +166,7 @@ document.getElementById('Create_Server_Button').style.display = "none";
           height: '390',
           videoId: '',
           playerVars: {
-            'autoplay': 0
+            'autoplay': 0, 'controls':0
           },
           events: {
             onReady: onPlayerReady,
