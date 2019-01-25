@@ -97,8 +97,7 @@ document.getElementById('UsernameText').style.display = "inherit";
 document.getElementById('RoomNameText').style.display = "inherit";
 document.getElementById('RoomCodeText').style.display = "inherit";
 document.getElementById('enterRoomButton').style.display = "inherit";
-document.getElementById('EnterVideo').style.display = "inherit";
-document.getElementById('SubmitVideo').style.display = "inherit";
+
   }
 function EnterRoom(){
   //lets send some info to the server
@@ -109,6 +108,8 @@ document.getElementById('enterRoomButton').style.display = "none";
 document.getElementById('UsernameText').style.display = "none";
 document.getElementById('RoomNameText').style.display = "none";
 document.getElementById('RoomCodeText').style.display = "none";
+document.getElementById('EnterVideo').style.display = "inherit";
+document.getElementById('SubmitVideo').style.display = "inherit";
 var joinInfo = {};
 joinInfo.username = username;
 joinInfo.name = roomId;
