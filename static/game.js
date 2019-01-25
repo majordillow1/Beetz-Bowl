@@ -23,8 +23,8 @@ socket.on('JoinOnId', function(server){
   JoinInformation.code = server.code;
   
 //socket.emit('JoinRoom', JoinInformation);
-document.getElementById('Roomname').innerHTML = "Room name " + server.id;
-document.getElementById('Roomcode').innerHTML = "Room code " + server.code;
+document.getElementById('Roomname').innerHTML = "Room name: " + server.id;
+document.getElementById('Roomcode').innerHTML = "Room code: " + server.code;
 console.log('shouldve got id');
 });
 socket.on('wrongCode', function(){
