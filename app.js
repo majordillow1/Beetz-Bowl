@@ -44,11 +44,14 @@ io.on('connection', function(client){
     if(usernamesperRoom != null){
     if(client.username != null){
       //find room
+      
       clientsUsernames.splice(clientsUsernames.indexOf(client.username), 1);
+      
       let rooms = Object.keys(client.rooms)[1];
+      if(client.username !=rooms+"master"){
       //console.log(rooms + " disconnected from " + client.username);
       //this is the array of the string rigtht
-      if(usernamesperRoom.length >= 2){
+      
       var removeArray = usernamesperRoom[rooms].split("--/");
       
       for(var i in removeArray){
@@ -76,6 +79,7 @@ io.on('connection', function(client){
     }
   }
 }
+
   //  console.log("disconnect");
   });
     //handle a disconnect
@@ -143,7 +147,7 @@ io.on('connection', function(client){
           client.emit('JoinOnId', servers[i]);
           console.log('sending join id');
           client.join(servers[i].id);
-          client.username = servers[i].id;
+          client.username = servers[i].id + "master";
           client.emit('isMaster');
         }
       }
