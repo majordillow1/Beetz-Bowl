@@ -144,7 +144,7 @@ document.getElementById('Create_Server_Button').style.display = "none";
     
     
       
-      PlayVideo(VideoList[0]);
+      PlayVideo(0);
     
   }else{
     VideoList.push(videoKey);
@@ -152,11 +152,20 @@ document.getElementById('Create_Server_Button').style.display = "none";
       document.getElementById('videolist').innerHTML = VideoList;
   }
       });
-      function PlayVideo(VideoQueue){
+      function PlayVideo(Sending){
         if(VideoList.length <= 1){
           document.getElementById('player').style.display = "inherit";
+          validVideoId(VideoList[0]);
         player.loadVideoById(VideoList[0]);
         player.playVideo();
+        return;
+        }
+        if(Sending == 1){
+          document.getElementById('player').style.display = "inherit";
+          validVideoId(VideoList[0]);
+        player.loadVideoById(VideoList[0]);
+        player.playVideo();
+        return;
         }
       }
   function onYouTubeIframeAPIReady(){
@@ -193,11 +202,13 @@ function onPlayerStateChange(event) {
           
           
           VideoList.shift();
+          document.getElementById('videolist').innerHTML = VideoList;
+          validVideoId(VideoList[0]);
           var x = new String(VideoList[0])
           //PlayVideo(VideoList[0]);
           event.target.loadVideoById(x);
           console.log('video is now' + VideoList[0]);
-          document.getElementById('videolist').innerHTML = VideoList;
+          
         }
     }
 }
@@ -205,4 +216,25 @@ function onPlayerStateChange(event) {
 function SubmitButton(){
   var videoInput = document.getElementById('EnterVideo').value;
   socket.emit('submitVideo',videoInput);
+}
+function validVideoId(id) {
+  var img = new Image();
+  img.src = "https://img.youtube.com/vi/" + id + "/mqdefault.jpg";
+  img.onload = function () {
+    checkThumbnail(this.width);
+  }
+}
+
+function checkThumbnail(width) {
+  //HACK a mq thumbnail has width of 320.
+  //if the video does not exist(therefore thumbnail don't exist), a default thumbnail of 120 width is returned.
+  if (width === 120) {
+    if(VideoList.length >= 1){
+      VideoList.shift();
+      PlayVideo(1);
+      console.log("shifted");
+    }
+    document.getElementById('videolist').innerHTML = VideoList;
+    
+  }
 }
