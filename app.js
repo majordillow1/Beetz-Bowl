@@ -49,6 +49,7 @@ io.on('connection', function(client){
       clientsUsernames.splice(clientsUsernames.indexOf(client.username), 1);
       
       let rooms = Object.keys(client.rooms)[1];
+      client.leave(rooms);
       if(client.username !=rooms+"master"){
       //console.log(rooms + " disconnected from " + client.username);
       //this is the array of the string rigtht
@@ -86,7 +87,15 @@ io.on('connection', function(client){
     //handle a disconnect
     //to send to specific rooms io.sockets.in(rooms).emit('RemovefromPlayaList',removeArray);
     client.on('CreateRoom', function(g){
-      
+        if(g.code.length >= 17){
+          //room code errors: 0 = too long, 1 = empty
+          client.emit('RoomCodeErrors', 0);
+          return;
+        }
+        if(!g.code){
+          client.emit('RoomCodeErrors', 1);
+          return;
+        }
         g.id = (Math.random()+1).toString(36).slice(2, 18);
         console.log('creating room' + "id: " + g.id + "creator: " + g.creator);
         servers.push(g);

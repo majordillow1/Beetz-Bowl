@@ -6,44 +6,71 @@
   </head>
   <body>
         <script src="/socket.io/socket.io.js"></script>
-		<h1>Beetz-Bowl</h2>
+        <h1>Beetz-Bowl</h1>
+        <div id="Content">
+        <div id="MainPageInfo">
+		
         <input id="Start_Room_Button" type="button" onclick="CreateRoom()" value="Create Room"/>
         <input id="Join_Room_Button" type="button" onclick="JoinRoom()" value="Join Room"/>
+    </div>
+
+
+        
+    <div align="center"> <!-- Center all buttons, inputs, and video -->
+
+      <div id="CreateRoomPage">
+      <p>Please enter a password for your Server</p>
+			<input id="roomPassword" type="text" value="password"/>
+      <input id="Create_Server_Button" type="button" onclick="ServerCreateRoom()" value="Start Bowl"/>
+      </div>
+      <div id="ServerMasterInfo">
         <p id="Roomname">The room name:</p>
         <p id="Roomcode">The room code:</p>
-		<div align="center"> <!-- Center all buttons, inputs, and video -->
-			<input id="roomPassword" type="text" value="password"/>
-			<input id="Create_Server_Button" type="button" onclick="ServerCreateRoom()" value="Start Bowl"/>
+        <div id="player">
+			 
+          <script src="https://www.youtube.com/player_api"></script>
+        </div>
+      </div>
+      </div>
+      
+      <div id="JoinRoomInfoPage">
 			<input id="UsernameText" type="text" value="Username"/>
 			<input id="RoomNameText" type="text" value="Room Name"/>
 			<input id="RoomCodeText" type="text" value="Room Code"/>
-			<input id="enterRoomButton" type="button" value="enter room" onclick="EnterRoom()"/>
+      <input id="enterRoomButton" type="button" value="enter room" onclick="EnterRoom()"/>
+    </div>
+    <div id="clientSideInfo">
 			<input id="EnterVideo" type="Text" value="enter video url"/>
-      <input id="SubmitVideo" type="button" value="submit video" onclick="SubmitButton()"/>
+     
       <input id="SearchVideo" type="button" value="Search for videos" onclick="SearchVideos()"/>
+      <div id="SearchResults">
+        <h2>Search Results</h2>
+        <div id="buttons">
+
+        </div>
+      </div>
+
+    </div>
       <!--This is where the youtube player is held-->
-			<div id="player">
-			 
-			  <script src="https://www.youtube.com/player_api"></script>
-			</div>
-		</div>
+			
+
+
+    <div id="SharedServerInfo">
+    <div id="QueueListDiv">
 		<h2>Queue List</h2>
         <div id="videolist">
 
         </div>
+      </div>
         <div id="playerlistholder">
           <h2>Players in Lobby</h2>
           <div id="playerList">
         
           </div>
         </div>
+      </div>
         <!--Where search buttons go after being generated-->
-        <div id="SearchResults">
-          <h2>Search Results</h2>
-          <div id="buttons">
-
-          </div>
-        </div>
+    </div>
   </body>
   <script src="static/game.js"></script>
 </html>

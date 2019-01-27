@@ -1,4 +1,5 @@
 var socket = io();
+mainPage();
 socket.on('connect', function(data) {
 
     //logs connection to the website. We will ask the person to either create a room, or join one.
@@ -27,26 +28,32 @@ document.getElementById('Roomname').innerHTML = "Room name: " + server.id;
 document.getElementById('Roomcode').innerHTML = "Room code: " + server.code;
 console.log('shouldve got id');
 });
+//error handling area
+socket.on('RoomCodeErrors',function(CodeError){
+switch(CodeError){
+  case 0:
+    alert('Sorry, The room password you have entered is too long');
+    CreateServerPage();
+  case 1:
+    alert('Sorry, room password cannot be blank. Please enter a valid password. Passwords can be 1-16 characters');
+    CreateServerPage();
+}
+});
+
 socket.on('wrongCode', function(){
 alert("This is the wrong code. Please try again!");
-document.getElementById('enterRoomButton').style.display = "inherit";
-document.getElementById('UsernameText').style.display = "inherit";
-document.getElementById('RoomNameText').style.display = "inherit";
-document.getElementById('RoomCodeText').style.display = "inherit";
+
+JoinInfoPage();
 });
 socket.on('RoomNotFound', function(){
 alert("Room not found");
-document.getElementById('enterRoomButton').style.display = "inherit";
-document.getElementById('UsernameText').style.display = "inherit";
-document.getElementById('RoomNameText').style.display = "inherit";
-document.getElementById('RoomCodeText').style.display = "inherit";
+
+JoinInfoPage();
 });
 socket.on('usedUsername' ,function(){
   alert("username in use");
-  document.getElementById('enterRoomButton').style.display = "inherit";
-  document.getElementById('UsernameText').style.display = "inherit";
-  document.getElementById('RoomNameText').style.display = "inherit";
-  document.getElementById('RoomCodeText').style.display = "inherit";
+ 
+  JoinInfoPage();
 });
 //gets player updates and changes them when players join servers
 socket.on('addToPlayalist',function(usaname){
@@ -109,35 +116,21 @@ divin.appendChild(span);
   function CreateRoom(){
 //in this function we want to change the elements on the page adding a "room code" text and add the "Queue list" both of these should just be empty then we will do
 //a socket.on in which the server will relay info back to the client to fill this stuff in.
-document.getElementById('Start_Room_Button').style.display = "none";
-document.getElementById('Join_Room_Button').style.display = "none";
-document.getElementById('Roomname').style.display = "inherit";
-document.getElementById('Roomcode').style.display = "inherit";
-document.getElementById('Create_Server_Button').style.display = "inherit";
-document.getElementById('roomPassword').style.display = "inherit";
+
+CreateServerPage();
   }
   function JoinRoom(){
 //in this function we wont send any info to the server instead we will now change the page to ask for a username and a room code.
-document.getElementById('Start_Room_Button').style.display = "none";
-document.getElementById('Join_Room_Button').style.display = "none";
-document.getElementById('UsernameText').style.display = "inherit";
-document.getElementById('RoomNameText').style.display = "inherit";
-document.getElementById('RoomCodeText').style.display = "inherit";
-document.getElementById('enterRoomButton').style.display = "inherit";
 
+JoinInfoPage();
   }
 function EnterRoom(){
   //lets send some info to the server
 username = document.getElementById('UsernameText').value;
 roomId = document.getElementById('RoomNameText').value;
 roomCode = document.getElementById('RoomCodeText').value;
-document.getElementById('enterRoomButton').style.display = "none";
-document.getElementById('UsernameText').style.display = "none";
-document.getElementById('RoomNameText').style.display = "none";
-document.getElementById('RoomCodeText').style.display = "none";
-document.getElementById('EnterVideo').style.display = "inherit";
-//document.getElementById('SubmitVideo').style.display = "inherit";
-document.getElementById('SearchVideo').style.display = "inherit";
+
+ParticipantPage();
 var joinInfo = {};
 joinInfo.username = username;
 joinInfo.name = roomId;
@@ -146,7 +139,7 @@ socket.emit('JoinRoom', joinInfo);
 }
   function ServerCreateRoom(){
 //in this function we will actually create the server on the server side
-document.getElementById('roomPassword').style.display = "none";
+//document.getElementById('roomPassword').style.display = "none";
 var gameObject = {};
 gameObject.id = "test";
 gameObject.creator = socket.id;
@@ -156,7 +149,8 @@ console.log('starting talk to server');
 socket.emit('CreateRoom',gameObject);
 //find room with the socket id, and return it's room id after its created. Then Join the room in the next function
 socket.emit('retrieveRoom', gameObject.creator);
-document.getElementById('Create_Server_Button').style.display = "none";
+
+ServerMasterPage();
   }
   var isMaster = false;
   socket.on('isMaster', function(){
@@ -182,14 +176,14 @@ document.getElementById('Create_Server_Button').style.display = "none";
       });
       function PlayVideo(Sending){
         if(VideoList.length <= 1){
-          document.getElementById('player').style.display = "inherit";
+          //document.getElementById('player').style.display = "inherit";
           validVideoId(VideoList[0]);
         player.loadVideoById(VideoList[0]);
         player.playVideo();
         return;
         }
         if(Sending == 1){
-          document.getElementById('player').style.display = "inherit";
+         // document.getElementById('player').style.display = "inherit";
           validVideoId(VideoList[0]);
         player.loadVideoById(VideoList[0]);
         player.playVideo();
@@ -248,6 +242,10 @@ function SubmitButton(){
 function SendVideoID(VideoID){
   //var videoInput = document.getElementById('EnterVideo').value;
   socket.emit('submitVideo',VideoID);
+  var myNode = document.getElementById("buttons");
+  while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
+  }
 }
 function validVideoId(id) {
   var img = new Image();
@@ -274,4 +272,52 @@ function checkThumbnail(width) {
 function SearchVideos(){
   var VideoSearchInput = document.getElementById('EnterVideo').value;
   socket.emit('SearchVideo', VideoSearchInput);
+}
+//gonna act like we got pages
+//list of divs include MainPageInfo CreateRoomPage JoinRoomInfoPage clientSideInfo player SharedServerInfo
+function mainPage(){
+  document.getElementById('Content').style.display ="inherit";
+document.getElementById('MainPageInfo').style.display = "inherit";
+document.getElementById('CreateRoomPage').style.display = "none";
+document.getElementById('JoinRoomInfoPage').style.display = "none";
+document.getElementById('clientSideInfo').style.display = "none";
+document.getElementById('player').style.display = "none";
+document.getElementById('SharedServerInfo').style.display = "none";
+document.getElementById('ServerMasterInfo').style.display = "none"
+}
+function CreateServerPage(){
+  document.getElementById('MainPageInfo').style.display = "none";
+  document.getElementById('CreateRoomPage').style.display = "inherit";
+  document.getElementById('JoinRoomInfoPage').style.display = "none";
+  document.getElementById('clientSideInfo').style.display = "none";
+  document.getElementById('player').style.display = "none";
+  document.getElementById('SharedServerInfo').style.display = "none";
+  document.getElementById('ServerMasterInfo').style.display = "none"
+}
+function ServerMasterPage(){
+  document.getElementById('MainPageInfo').style.display = "none";
+  document.getElementById('CreateRoomPage').style.display = "none";
+  document.getElementById('JoinRoomInfoPage').style.display = "none";
+  document.getElementById('clientSideInfo').style.display = "none";
+  document.getElementById('player').style.display = "inherit";
+  document.getElementById('SharedServerInfo').style.display = "inherit";
+  document.getElementById('ServerMasterInfo').style.display = "inherit"
+}
+function JoinInfoPage(){
+  document.getElementById('MainPageInfo').style.display = "none";
+  document.getElementById('CreateRoomPage').style.display = "none";
+  document.getElementById('JoinRoomInfoPage').style.display = "inherit";
+  document.getElementById('clientSideInfo').style.display = "none";
+  document.getElementById('player').style.display = "none";
+  document.getElementById('SharedServerInfo').style.display = "none";
+  document.getElementById('ServerMasterInfo').style.display = "none"
+}
+function ParticipantPage(){
+  document.getElementById('MainPageInfo').style.display = "none";
+  document.getElementById('CreateRoomPage').style.display = "none";
+  document.getElementById('JoinRoomInfoPage').style.display = "none";
+  document.getElementById('clientSideInfo').style.display = "inherit";
+  document.getElementById('player').style.display = "none";
+  document.getElementById('SharedServerInfo').style.display = "inherit";
+  document.getElementById('ServerMasterInfo').style.display = "none"
 }
