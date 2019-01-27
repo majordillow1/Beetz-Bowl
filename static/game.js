@@ -1,5 +1,7 @@
-var socket = io();
 mainPage();
+
+var socket = io();
+
 socket.on('connect', function (data) {
 
   //logs connection to the website. We will ask the person to either create a room, or join one.
