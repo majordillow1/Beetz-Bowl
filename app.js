@@ -179,6 +179,10 @@ io.on('connection', function(client){
     });
     
    });
+   client.on('UpdateQueueList', function(List){
+    let rooms = Object.keys(client.rooms)[1];
+    client.broadcast.to(rooms).emit('UpdateQueue', List);
+   });
   });
 //youtube stuff
   

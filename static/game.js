@@ -39,7 +39,10 @@ switch(CodeError){
     CreateServerPage();
 }
 });
-
+socket.on('UpdateQueue', function(VideoQueue){
+  document.getElementById('videolist').innerHTML = VideoQueue;
+  VideoList = VideoQueue;
+});
 socket.on('wrongCode', function(){
 alert("This is the wrong code. Please try again!");
 
@@ -167,14 +170,17 @@ ServerMasterPage();
     
       
       PlayVideo(0);
+      socket.emit('UpdateQueueList', VideoList);
     
   }else{
     VideoList.push(videoKey);
     
       document.getElementById('videolist').innerHTML = VideoList;
+      socket.emit('UpdateQueueList', VideoList);
   }
       });
       function PlayVideo(Sending){
+        
         if(VideoList.length <= 1){
           //document.getElementById('player').style.display = "inherit";
           validVideoId(VideoList[0]);
@@ -230,7 +236,7 @@ function onPlayerStateChange(event) {
           //PlayVideo(VideoList[0]);
           event.target.loadVideoById(x);
           console.log('video is now' + VideoList[0]);
-          
+          socket.emit('UpdateQueueList', VideoList);
         }
     }
 }
