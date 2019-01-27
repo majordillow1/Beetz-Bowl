@@ -34,9 +34,11 @@ socket.on('RoomCodeErrors', function (CodeError) {
     case 0:
       alert('Sorry, The room password you have entered is too long');
       CreateServerPage();
+      break;
     case 1:
       alert('Sorry, room password cannot be blank. Please enter a valid password. Passwords can be 1-16 characters');
       CreateServerPage();
+      break;
   }
 });
 socket.on('UpdateQueue', function (VideoQueue) {
@@ -47,6 +49,20 @@ socket.on('wrongCode', function () {
   alert("This is the wrong code. Please try again!");
 
   JoinInfoPage();
+});
+//socket on badusername 0 = empty 1 = too long
+socket.on('BadUsername', function(ErrorCode){
+switch(ErrorCode){
+  case 0:
+    alert('Username cannot be empty');
+    JoinInfoPage();
+    break;
+  case 1:
+    alert('Username cannot be longer than 16 characters');
+    JoinInfoPage();
+    break;
+
+}
 });
 socket.on('RoomNotFound', function () {
   alert("Room not found");

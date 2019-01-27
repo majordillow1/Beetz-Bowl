@@ -102,8 +102,16 @@ io.on('connection', function(client){
 
     });
      //client join room
+     //client emit badusername 0 = empty 1 = too long
      client.on('JoinRoom', function(serverinfo){
-       
+       if(!serverinfo.username){
+         client.emit('BadUsername',0);
+         return;
+       }
+       if(serverinfo.username.length >= 17){
+         client.emit('BadUsername', 1);
+         return;
+       }
        for(var c = 0;c<clientsUsernames.length;c++){
          console.log("Checking username " + clientsUsernames[c]);
          if(serverinfo.username == clientsUsernames[c]){
