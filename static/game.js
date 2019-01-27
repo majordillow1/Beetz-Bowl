@@ -79,6 +79,31 @@ playa.appendChild(textnode);
 }
 
 });
+var videos = [];
+socket.on('searchResults', function(SearchResults){
+console.log(SearchResults);
+var myNode = document.getElementById("buttons");
+  while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
+  }
+  console.log("shouldve got something");
+  console.log(videos);
+  videos = SearchResults;
+  var doc = document, docFrag = document.createDocumentFragment();
+  if(videos.length >= 1){
+  for (var i = 0; i<videos.length;i++){
+    if(videos[i].kind == "youtube#channel"){
+      continue;
+    }
+    var test = videos[i].id;
+       var span = document.createElement('span');
+span.innerHTML = '<input type="button" id="'+test+'"  onclick="SendVideoID(\'' + test + '\')"  value = "'+videos[i].title+'">';
+var divin = document.getElementById("buttons");
+divin.appendChild(span);
+       console.log("should add button for" + test[i].id);
+  }
+}
+});
   function CreateRoom(){
 //in this function we want to change the elements on the page adding a "room code" text and add the "Queue list" both of these should just be empty then we will do
 //a socket.on in which the server will relay info back to the client to fill this stuff in.
@@ -109,7 +134,8 @@ document.getElementById('UsernameText').style.display = "none";
 document.getElementById('RoomNameText').style.display = "none";
 document.getElementById('RoomCodeText').style.display = "none";
 document.getElementById('EnterVideo').style.display = "inherit";
-document.getElementById('SubmitVideo').style.display = "inherit";
+//document.getElementById('SubmitVideo').style.display = "inherit";
+document.getElementById('SearchVideo').style.display = "inherit";
 var joinInfo = {};
 joinInfo.username = username;
 joinInfo.name = roomId;
@@ -217,6 +243,10 @@ function SubmitButton(){
   var videoInput = document.getElementById('EnterVideo').value;
   socket.emit('submitVideo',videoInput);
 }
+function SendVideoID(VideoID){
+  //var videoInput = document.getElementById('EnterVideo').value;
+  socket.emit('submitVideo',VideoID);
+}
 function validVideoId(id) {
   var img = new Image();
   img.src = "https://img.youtube.com/vi/" + id + "/mqdefault.jpg";
@@ -237,4 +267,8 @@ function checkThumbnail(width) {
     document.getElementById('videolist').innerHTML = VideoList;
     
   }
+}
+function SearchVideos(){
+  var VideoSearchInput = document.getElementById('EnterVideo').value;
+  socket.emit('SearchVideo', VideoSearchInput);
 }

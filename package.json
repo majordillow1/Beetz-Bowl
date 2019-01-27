@@ -18,6 +18,7 @@
   "homepage": "https://github.com/majordillow1/Beetz-Bowl#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "youtube-search": "^1.1.4"
   }
 }

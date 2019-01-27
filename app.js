@@ -2,6 +2,7 @@ const express = require('express')
 const app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var search = require('youtube-search');
 app.get('/',function(req,res,next){
   res.sendFile(__dirname+'/index.html');
 });
@@ -36,7 +37,7 @@ setInterval(
  },
  10000);
 //var servers = [];
-
+var testSearch = "Mikey";
 var usernamesperRoom = {};
 io.on('connection', function(client){
   console.log('Client Connected....');
@@ -156,5 +157,20 @@ io.on('connection', function(client){
     let rooms = Object.keys(client.rooms)[1];
     io.in(rooms).emit('addVideo',VideoInput );
    });
+   client.on('SearchVideo', function(VideoSearch){
+    var opts = {
+      maxResults: 10,
+      key: 'AIzaSyB9tJ5xqaB6dK9Paf6vswcdBjgmmwUZ-WE'
+    };
+     
+    search(VideoSearch, opts, function(err, results) {
+      if(err) return console.log(err);
+     
+      client.emit('searchResults',results);
+    });
+    
+   });
   });
- 
+//youtube stuff
+  
+ //search("test");
