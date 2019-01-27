@@ -48,6 +48,7 @@ socket.on('usedUsername' ,function(){
   document.getElementById('RoomNameText').style.display = "inherit";
   document.getElementById('RoomCodeText').style.display = "inherit";
 });
+//gets player updates and changes them when players join servers
 socket.on('addToPlayalist',function(usaname){
   var myNode = document.getElementById("playerList");
   while (myNode.firstChild) {
@@ -79,6 +80,7 @@ playa.appendChild(textnode);
 }
 
 });
+//this socket.on creates the list of buttons for videos got back from server,
 var videos = [];
 socket.on('searchResults', function(SearchResults){
 console.log(SearchResults);
@@ -268,6 +270,7 @@ function checkThumbnail(width) {
     
   }
 }
+//sends search information up to server to get search info back
 function SearchVideos(){
   var VideoSearchInput = document.getElementById('EnterVideo').value;
   socket.emit('SearchVideo', VideoSearchInput);
