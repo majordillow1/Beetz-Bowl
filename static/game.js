@@ -44,8 +44,10 @@ socket.on('RoomCodeErrors', function (CodeError) {
   }
 });
 socket.on('UpdateQueue', function (VideoQueue) {
-  document.getElementById('videolist').innerHTML = VideoQueue;
+ // document.getElementById('videolist').innerHTML = VideoQueue;
+ 
   VideoList = VideoQueue;
+  CreateQueuelist(VideoList);
 });
 socket.on('wrongCode', function () {
   alert("This is the wrong code. Please try again!");
@@ -127,7 +129,7 @@ socket.on('searchResults', function (SearchResults) {
       }
       var test = videos[i].id;
       var span = document.createElement('span');
-      span.innerHTML = '<input type="button" id="' + test + '"  onclick="SendVideoID(\'' + test + '\')"  value = "' + videos[i].title + '">';
+      span.innerHTML = '<input type="button" id="' + test + '"  onclick="SendVideoID(\'' + test + '\',\''+ videos[i].title + '\')"  value = "' + videos[i].title + '">';
       var divin = document.getElementById("buttons");
       divin.appendChild(span);
       console.log("should add button for" + test[i].id);
@@ -182,27 +184,29 @@ var player;
 socket.on('addVideo', function (videoKey) {
   if (isMaster) {
     VideoList.push(videoKey);
-    document.getElementById('videolist').innerHTML = VideoList;
+    //document.getElementById('videolist').innerHTML = VideoList;
+    CreateQueuelist(VideoList);
     PlayVideo(0);
     socket.emit('UpdateQueueList', VideoList);
   } else {
     VideoList.push(videoKey);
-    document.getElementById('videolist').innerHTML = VideoList;
+   // document.getElementById('videolist').innerHTML = VideoList;
+   CreateQueuelist(VideoList);
     socket.emit('UpdateQueueList', VideoList);
   }
 });
 function PlayVideo(Sending) {
   if (VideoList.length <= 1) {
     //document.getElementById('player').style.display = "inherit";
-    validVideoId(VideoList[0]);
-    player.loadVideoById(VideoList[0]);
+    validVideoId(VideoList[0].Id);
+    player.loadVideoById(VideoList[0].Id);
     player.playVideo();
     return;
   }
   if (Sending == 1) {
     // document.getElementById('player').style.display = "inherit";
-    validVideoId(VideoList[0]);
-    player.loadVideoById(VideoList[0]);
+    validVideoId(VideoList[0].Id);
+    player.loadVideoById(VideoList[0].Id);
     player.playVideo();
     return;
   }
@@ -239,24 +243,26 @@ function onPlayerStateChange(event) {
 
 
       VideoList.shift();
-      document.getElementById('videolist').innerHTML = VideoList;
-      validVideoId(VideoList[0]);
-      var x = new String(VideoList[0])
+      //document.getElementById('videolist').innerHTML = VideoList;
+      CreateQueuelist(VideoList);
+      validVideoId(VideoList[0].Id);
+      var x = new String(VideoList[0].Id)
       //PlayVideo(VideoList[0]);
       event.target.loadVideoById(x);
-      console.log('video is now' + VideoList[0]);
+      console.log('video is now' + VideoList[0].Id);
       socket.emit('UpdateQueueList', VideoList);
     }
   }
 }
 
-function SubmitButton() {
-  var videoInput = document.getElementById('EnterVideo').value;
-  socket.emit('submitVideo', videoInput);
-}
-function SendVideoID(VideoID) {
+
+function SendVideoID(VideoID,Title) {
   //var videoInput = document.getElementById('EnterVideo').value;
-  socket.emit('submitVideo', VideoID);
+  var VideoInfo = {};
+  VideoInfo.Id= VideoID;
+  VideoInfo.user = document.getElementById('UsernameText').value;
+  VideoInfo.title = Title;
+  socket.emit('submitVideo', VideoInfo);
   var myNode = document.getElementById("buttons");
   while (myNode.firstChild) {
     myNode.removeChild(myNode.firstChild);
@@ -279,8 +285,8 @@ function checkThumbnail(width) {
       PlayVideo(1);
       console.log("shifted");
     }
-    document.getElementById('videolist').innerHTML = VideoList;
-
+    //document.getElementById('videolist').innerHTML = VideoList;
+    CreateQueuelist(VideoList);
   }
 }
 //sends search information up to server to get search info back
@@ -335,4 +341,26 @@ function ParticipantPage() {
   document.getElementById('player').style.display = "none";
   document.getElementById('SharedServerInfo').style.display = "inherit";
   document.getElementById('ServerMasterInfo').style.display = "none"
+}
+function CreateQueuelist(VideoQueueListing){
+  var myNode = document.getElementById("videolist");
+  while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+  }
+  console.log("shouldve created something");
+ // console.log(videos);
+  videos = SearchResults;
+  var doc = document, docFrag = document.createDocumentFragment();
+  if (VideoQueueListing.length >= 1) {
+    for (var i = 0; i < VideoQueueListing.length; i++) {
+      
+      var name = VideoQueueListing[i].title;
+      var user = VideoQueueListing[i].user;
+      var span = document.createElement('span');
+      span.innerHTML = '<p class=\'videoinfo\'>' + name + ': ' + user + '</p>';
+      var divin = document.getElementById("videolist");
+      divin.appendChild(span);
+      //console.log("should add button for" + test[i].id);
+}
+  }
 }

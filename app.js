@@ -172,7 +172,7 @@ io.on('connection', function(client){
     });
    client.on('submitVideo',function(VideoInput){
     let rooms = Object.keys(client.rooms)[1];
-    io.in(rooms).emit('addVideo',VideoInput );
+    io.in(rooms).emit('addVideo',VideoInput);
    });
    client.on('SearchVideo', function(VideoSearch){
     var opts = {
