@@ -33,3 +33,7 @@ body{
 	background-color: #C0C0C0;
 	text-align: center; /*Center all text within body*/
 }
+/*this is for the info in the video queue*/
+.videoinfo{
+	border-style:solid;
+}
