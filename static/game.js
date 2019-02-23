@@ -332,7 +332,7 @@ function ServerMasterPage() {
   document.getElementById('CreateRoomPage').style.display = "none";
   document.getElementById('JoinRoomInfoPage').style.display = "none";
   document.getElementById('clientSideInfo').style.display = "none";
-  document.getElementById('player').style.display = "inherit";
+  document.getElementById('player').style.display = "none";
   document.getElementById('SharedServerInfo').style.display = "inherit";
   document.getElementById('ServerMasterInfo').style.display = "inherit"
 }
