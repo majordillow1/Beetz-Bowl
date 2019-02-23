@@ -45,7 +45,16 @@ socket.on('RoomCodeErrors', function (CodeError) {
 });
 socket.on('UpdateQueue', function (VideoQueue) {
  // document.getElementById('videolist').innerHTML = VideoQueue;
- 
+ if(isMaster){
+   if(VideoList.length >= 1){
+    document.getElementById('playerlistholder').style.marginTop = "-400px";
+   document.getElementById('playerlistholder').style.cssFloat = "left";
+   }else{
+    document.getElementById('playerlistholder').style.marginTop = "";
+    document.getElementById('playerlistholder').style.cssFloat = "";
+   }
+   
+ }
   VideoList = VideoQueue;
   CreateQueuelist(VideoList);
 });

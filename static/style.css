@@ -30,7 +30,7 @@ h2{
 }
 body{
     
-	background-color: #2f3640;
+	background-color: #32333D;
 	text-align: center; /*Center all text within body*/
 }
 
@@ -39,8 +39,8 @@ body{
 	border-style:solid;
 }
 input[type="button"]{
-	
-		background-color:#c23616; 
+		font-family:'Courier New', Courier, monospace;
+		background-color:#B21F38; 
 		border: none;
 		color: white;
 		padding: 15px 32px;
@@ -58,11 +58,12 @@ input[type="button"]:hover{
 	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
 input[type=text] {
-	width: 100%;
+	font-family:'Courier New', Courier, monospace;
+	width: 50%;
 	padding: 12px 20px;
 	margin: 8px 0;
 	box-sizing: border-box;
-	border: 3px solid #ccc;
+	border: 3px solid rgb(33, 58, 202);
 	-webkit-transition: 0.5s;
 	transition: 0.5s;
 	outline: none;
@@ -106,7 +107,19 @@ input[type=text] {
 	60%{box-shadow:0px 10px 5px purple;}
   }
 h1{
-	
+	color: #26A00C;
 	display: inline-block;
 	padding-top:10px;
+}
+p{
+color: #3cd31a;
+font-size: 30px;
+font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+h2{
+	color: #26A00C;
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+#playerlistholder{
+	
 }
