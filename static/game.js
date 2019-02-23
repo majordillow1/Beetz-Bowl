@@ -201,10 +201,12 @@ function PlayVideo(Sending) {
     validVideoId(VideoList[0].Id);
     player.loadVideoById(VideoList[0].Id);
     player.playVideo();
+    SetVideoOn();
     return;
   }
   if (Sending == 1) {
     // document.getElementById('player').style.display = "inherit";
+    SetVideoOn();
     validVideoId(VideoList[0].Id);
     player.loadVideoById(VideoList[0].Id);
     player.playVideo();
@@ -240,7 +242,14 @@ function onPlayerStateChange(event) {
     //VideoList.pop();
     if (VideoList != null) {
 
-
+      if(VideoList.length <= 1){
+        SetVideoOff();
+        player.stopVideo();
+        VideoList.shift();
+        CreateQueuelist(VideoList);
+        socket.emit('UpdateQueueList', VideoList);
+        return;
+      }
 
       VideoList.shift();
       //document.getElementById('videolist').innerHTML = VideoList;
@@ -251,6 +260,7 @@ function onPlayerStateChange(event) {
       event.target.loadVideoById(x);
       console.log('video is now' + VideoList[0].Id);
       socket.emit('UpdateQueueList', VideoList);
+      
     }
   }
 }
@@ -286,7 +296,9 @@ function checkThumbnail(width) {
       console.log("shifted");
     }
     //document.getElementById('videolist').innerHTML = VideoList;
+    
     CreateQueuelist(VideoList);
+    socket.emit('UpdateQueueList', VideoList);
   }
 }
 //sends search information up to server to get search info back
@@ -342,6 +354,12 @@ function ParticipantPage() {
   document.getElementById('SharedServerInfo').style.display = "inherit";
   document.getElementById('ServerMasterInfo').style.display = "none"
 }
+function SetVideoOn(){
+  document.getElementById('player').style.display = "inherit";
+}
+function SetVideoOff(){
+  document.getElementById('player').style.display = "none";
+}
 function CreateQueuelist(VideoQueueListing){
   var myNode = document.getElementById("videolist");
   while (myNode.firstChild) {
@@ -353,7 +371,7 @@ function CreateQueuelist(VideoQueueListing){
   var doc = document, docFrag = document.createDocumentFragment();
   if (VideoQueueListing.length >= 1) {
     for (var i = 0; i < VideoQueueListing.length; i++) {
-      
+      if(!isMaster){
       var name = VideoQueueListing[i].title;
       var user = VideoQueueListing[i].user;
       var span = document.createElement('span');
@@ -361,6 +379,51 @@ function CreateQueuelist(VideoQueueListing){
       var divin = document.getElementById("videolist");
       divin.appendChild(span);
       //console.log("should add button for" + test[i].id);
+      }else{
+        var name = VideoQueueListing[i].title;
+      var user = VideoQueueListing[i].user;
+      var span = document.createElement('span');
+      if(i == 0){
+        span.innerHTML = '<p class=\'videoinfo\'>' + name + ': ' + user + '</p> <input type="button" class="Skip"  onclick="SkipVideo()"  value = "Skip This Video">';
+    }else{
+      span.innerHTML = '<p class=\'videoinfo\'>' + name + ': ' + user + '</p> <input type="button" class="Delete"  onclick="DeleteVideo(\'' + i + '\')"  value = "Delete This Video">';
+    }
+      
+      var divin = document.getElementById("videolist");
+      divin.appendChild(span);
+      //console.log("should add button for" + test[i].id);
+      }
 }
   }
+}
+function SkipVideo(){
+  //Skip video in the highest of the list
+  
+
+
+if(VideoList.length >= 2){
+    VideoList.shift();
+    //document.getElementById('videolist').innerHTML = VideoList;
+    CreateQueuelist(VideoList);
+    //validVideoId(VideoList[0].Id);
+    //var x = new String(VideoList[0].Id)
+    PlayVideo(1);
+    //player.target.loadVideoById(x);
+    console.log('video is now' + VideoList[0].Id);
+    socket.emit('UpdateQueueList', VideoList);
+}else{
+  
+  VideoList.shift();
+  player.stopVideo();
+  CreateQueuelist(VideoList);
+  socket.emit('UpdateQueueList', VideoList);
+  SetVideoOff();
+}
+  
+  //socket.emit('UpdateQueueList', VideoList);
+}
+function DeleteVideo(numberInList){
+VideoList.splice(numberInList,1);
+CreateQueuelist(VideoList);
+socket.emit('UpdateQueueList', VideoList);
 }
